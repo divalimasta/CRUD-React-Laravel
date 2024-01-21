@@ -3,28 +3,28 @@ import { Link } from "react-router-dom"
 import axios from "axios";
 import Loading from "../components/Loading";
 
-function Album() {
+function User() {
 
     const [loading, setLoading] = useState(true);
-    const [albums, setAlbums] = useState([]);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         
-        axios.get(`http://localhost:8000/api/albums`).then(res => {
+        axios.get(`http://localhost:8000/api/users`).then(res => {
             console.log(res)
-            setAlbums(res.data.albums);
+            setUsers(res.data.users);
             setLoading(false);
         });
 
     }, [])
 
-    const deleteAlbum = (e, id) => {
+    const deleteUser = (e, id) => {
         e.preventDefault();
 
         const thisClicked = e.currentTarget;
         thisClicked.innerText = "Deleting...";
 
-        axios.delete(`http://localhost:8000/api/albums/${id}/delete`)
+        axios.delete(`http://localhost:8000/api/users/${id}/delete`)
         .then(res => {
 
             alert(res.data.message);
@@ -53,20 +53,21 @@ function Album() {
             <Loading />
         )
     }
-    var albumDetails = ""; 
-    albumDetails = albums.map((item, index) => {
+    var userDetails = ""; 
+    userDetails = users.map((item, index) => {
         return (
             <tr key={index}>
-                <td>{item.albumID}</td>
-                <td>{item.NamaAlbum}</td>
-                <td>{item.Deskripsi}</td>
-                <td>{item.TanggalDiBuat}</td>
-                <td>{item.id_user}</td>
+                <td>{item.id}</td>
+                <td>{item.username}</td>
+                <td>{item.password}</td>
+                <td>{item.email}</td>
+                <td>{item.NamaLengkap}</td>
+                <td>{item.alamat}</td>
                 <td>
-                    <Link to={`/albums/${item.albumID}/edit`} className="btn btn-success">Edit</Link>
+                    <Link to={`/users/${item.id}/edit`} className="btn btn-success">Edit</Link>
                 </td>
                 <td>
-                    <button type="button" onClick={(e) => deleteAlbum(e, item.id)} className="btn btn-danger">Delete</button>
+                    <button type="button" onClick={(e) => deleteUser(e, item.id)} className="btn btn-danger">Delete</button>
                 </td>
             </tr>
         )
@@ -78,26 +79,27 @@ function Album() {
                 <div className="col-md-12">
                     <div className="card">
                         <div className="card-header">
-                            <h4>Album List
-                                <Link to="/albums/create" className="btn btn-primary float-end">
-                                    Add Album</Link>
+                            <h4>User
+                                <Link to="/users/create" className="btn btn-primary float-end">
+                                    Add User</Link>
                             </h4>
                         </div>
                         <div className="card-body">
                             <table className="table table-stripe">
                                 <thead>
                                     <tr>
-                                        <th>ID album</th>
-                                        <th>Nama Album</th>
-                                        <th>Deskripsi</th>
-                                        <th>Tanggal di buat</th>
-                                        <th>ID user</th>
+                                        <th>ID</th>
+                                        <th>Username Album</th>
+                                        <th>Password</th>
+                                        <th>Email di buat</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Alamat</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {albumDetails}
+                                    {userDetails}
                                 </tbody>
                             </table>
                         </div>
@@ -108,4 +110,4 @@ function Album() {
     )
 }
 
-export default Album;
+export default User;

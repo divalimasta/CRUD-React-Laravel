@@ -3,28 +3,28 @@ import { Link } from "react-router-dom"
 import axios from "axios";
 import Loading from "../components/Loading";
 
-function Album() {
+function Like() {
 
     const [loading, setLoading] = useState(true);
-    const [albums, setAlbums] = useState([]);
+    const [likes, setLikes] = useState([]);
 
     useEffect(() => {
         
-        axios.get(`http://localhost:8000/api/albums`).then(res => {
+        axios.get(`http://localhost:8000/api/likes`).then(res => {
             console.log(res)
-            setAlbums(res.data.albums);
+            setLikes(res.data.likes);
             setLoading(false);
         });
 
     }, [])
 
-    const deleteAlbum = (e, id) => {
+    const deleteLike = (e, id) => {
         e.preventDefault();
 
         const thisClicked = e.currentTarget;
         thisClicked.innerText = "Deleting...";
 
-        axios.delete(`http://localhost:8000/api/albums/${id}/delete`)
+        axios.delete(`http://localhost:8000/api/likes/${id}/delete`)
         .then(res => {
 
             alert(res.data.message);
@@ -53,20 +53,19 @@ function Album() {
             <Loading />
         )
     }
-    var albumDetails = ""; 
-    albumDetails = albums.map((item, index) => {
+    var likeDetails = ""; 
+    likeDetails = likes.map((item, index) => {
         return (
             <tr key={index}>
-                <td>{item.albumID}</td>
-                <td>{item.NamaAlbum}</td>
-                <td>{item.Deskripsi}</td>
-                <td>{item.TanggalDiBuat}</td>
-                <td>{item.id_user}</td>
+                <td>{item.likeID}</td>
+                <td>{item.fotoID}</td>
+                <td>{item.userID}</td>
+                <td>{item.tanggalLike}</td>
                 <td>
-                    <Link to={`/albums/${item.albumID}/edit`} className="btn btn-success">Edit</Link>
+                    <Link to={`/likes/${item.likeID}/edit`} className="btn btn-success">Edit</Link>
                 </td>
                 <td>
-                    <button type="button" onClick={(e) => deleteAlbum(e, item.id)} className="btn btn-danger">Delete</button>
+                    <button type="button" onClick={(e) => deleteLike(e, item.id)} className="btn btn-danger">Delete</button>
                 </td>
             </tr>
         )
@@ -78,26 +77,25 @@ function Album() {
                 <div className="col-md-12">
                     <div className="card">
                         <div className="card-header">
-                            <h4>Album List
-                                <Link to="/albums/create" className="btn btn-primary float-end">
-                                    Add Album</Link>
+                            <h4>Like List
+                                <Link to="/likes/create" className="btn btn-primary float-end">
+                                    Add Like</Link>
                             </h4>
                         </div>
                         <div className="card-body">
                             <table className="table table-stripe">
                                 <thead>
                                     <tr>
-                                        <th>ID album</th>
-                                        <th>Nama Album</th>
-                                        <th>Deskripsi</th>
-                                        <th>Tanggal di buat</th>
-                                        <th>ID user</th>
+                                        <th>ID Like</th>
+                                        <th>ID Foto</th>
+                                        <th>ID User</th>
+                                        <th>Tanggal Like</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {albumDetails}
+                                    {likeDetails}
                                 </tbody>
                             </table>
                         </div>
@@ -108,4 +106,4 @@ function Album() {
     )
 }
 
-export default Album;
+export default Like;

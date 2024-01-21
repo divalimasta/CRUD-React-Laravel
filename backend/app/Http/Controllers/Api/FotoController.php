@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Album;
+use App\Models\Foto;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class AlbumController extends Controller
+class FotoController extends Controller
 {
     public function index() 
     {
-        $albums = Album::all();
-        if($albums->count() > 0){
+        $fotos = Foto::all();
+        if($fotos->count() > 0){
             return response()->json([
                 'status' => 200,
-                'albums' => $albums
+                'fotos' => $fotos
             ], 200);
         }else{
             return response()->json([
@@ -28,70 +28,59 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
+            'judulFoto' => 'required|string|max:191',
+            'deskripsiFoto' => 'required|string|max:191',
+            'tanggalUnggah' => 'required|date',
+            'lokasiFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'albumID' => 'required|string|max:191',
             'id_user' => 'required|string|max:191',
         ]);
 
-        if($validator->fails()){
-            
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
                 'errors' => $validator->messages()
-            ],422);
-
-        }else{
-
-            $album = Album::create([
-                'NamaAlbum' => $request->NamaAlbum,
-                'Deskripsi' => $request->Deskripsi,
-                'TanggalDiBuat' => $request->TanggalDiBuat,
-                'id_user' => $request->id_user,
-            ]);
-
-            if($album){
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => "Data telah ditambahkan!"
-                ],200);
-
-            }else{
-
-                return response()->json([
-                    'status' => 500,
-                    'message' => "Data gagal ditambahkan!"
-                ],500);
-            }
+            ], 422);
         }
-    }
 
-    public function show($id)
-    {
-        $album = Album::find($id);
-        if($album){
+        $file = $request->file('lokasiFile');
+        $namaFile = $file->getClientOriginalName();
+
+        // Pindahkan file ke direktori public/images
+        $tujuan_upload = public_path('images');
+        $file->move($tujuan_upload, $namaFile);
+
+        $foto = Foto::create([
+            'judulFoto' => $request->judulFoto,
+            'deskripsiFoto' => $request->deskripsiFoto,
+            'tanggalUnggah' => $request->tanggalUnggah,
+            'lokasiFile' => "images/$namaFile",
+            'albumID' => $request->albumID,
+            'id_user' => $request->id_user,
+        ]);
+
+        if ($foto) {
             return response()->json([
                 'status' => 200,
-                'message' => $album
-            ],200);
-
-        }else{
-
+                'message' => "Data telah ditambahkan!",
+                'foto' => $foto,
+            ], 200);
+        } else {
             return response()->json([
-                'status' => 404,
-                'message' => "Data tidak ditemukan!"
-            ],404);
+                'status' => 500,
+                'message' => "Data gagal ditambahkan!"
+            ], 500);
         }
     }
+
 
     public function edit($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $foto = Foto::find($id);
+        if($foto){
             return response()->json([
                 'status' => 200,
-                'album' => $album
+                'foto' => $foto
             ],200);
 
         }else{
@@ -106,9 +95,11 @@ class AlbumController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
+            'judulFoto' => 'required|string|max:191',
+            'deskripsiFoto' => 'required|string|max:191',
+            'tanggalUnggah' => 'required|date',
+            'lokasiFile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'albumID' => 'required|string|max:191',
             'id_user' => 'required|string|max:191',
         ]);
 
@@ -121,12 +112,14 @@ class AlbumController extends Controller
 
         }else{
 
-            $album = Album::find($id);
-            if($album){
-                $album->update([
-                    'NamaAlbum' => $request->NamaAlbum,
-                    'Deskripsi' => $request->Deskripsi,
-                    'TanggalDiBuat' => $request->TanggalDiBuat,
+            $foto = Foto::find($id);
+            if($foto){
+                $foto->update([
+                    'judulFoto' => $request->judulFoto,
+                    'deskripsiFoto' => $request->deskripsiFoto,
+                    'tanggalUnggah' => $request->tanggalUnggah,
+                    'lokasiFile' => "images/$namaFile",
+                    'albumID' => $request->albumID,
                     'id_user' => $request->id_user,
                 ]);
 
@@ -147,10 +140,10 @@ class AlbumController extends Controller
 
     public function destroy($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $foto = Foto::find($id);
+        if($foto){
 
-            $album->delete();
+            $foto->delete();
             return response()->json([
                 'status' => 200,
                 'message' => "Data telah dihapus"

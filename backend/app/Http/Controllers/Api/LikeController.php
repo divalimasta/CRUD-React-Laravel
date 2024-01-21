@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Album;
+use App\Models\Like;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class AlbumController extends Controller
+class LikeController extends Controller
 {
     public function index() 
     {
-        $albums = Album::all();
-        if($albums->count() > 0){
+        $likes = Like::all();
+        if($likes->count() > 0){
             return response()->json([
                 'status' => 200,
-                'albums' => $albums
+                'likes' => $likes
             ], 200);
         }else{
             return response()->json([
@@ -28,10 +28,9 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
-            'id_user' => 'required|string|max:191',
+            'fotoID' => 'required|string|max:191',
+            'userID' => 'required|string|max:191',
+            'tanggalLike' => 'required|date',
         ]);
 
         if($validator->fails()){
@@ -43,14 +42,13 @@ class AlbumController extends Controller
 
         }else{
 
-            $album = Album::create([
-                'NamaAlbum' => $request->NamaAlbum,
-                'Deskripsi' => $request->Deskripsi,
-                'TanggalDiBuat' => $request->TanggalDiBuat,
-                'id_user' => $request->id_user,
+            $like = Like::create([
+                'fotoID' => $request->fotoID,
+                'userID' => $request->userID,
+                'tanggalLike' => $request->tanggalLike,
             ]);
 
-            if($album){
+            if($like){
 
                 return response()->json([
                     'status' => 200,
@@ -69,11 +67,11 @@ class AlbumController extends Controller
 
     public function show($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $like = Like::find($id);
+        if($like){
             return response()->json([
                 'status' => 200,
-                'message' => $album
+                'message' => $like
             ],200);
 
         }else{
@@ -87,11 +85,11 @@ class AlbumController extends Controller
 
     public function edit($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $like = Like::find($id);
+        if($like){
             return response()->json([
                 'status' => 200,
-                'album' => $album
+                'like' => $like
             ],200);
 
         }else{
@@ -106,10 +104,9 @@ class AlbumController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
-            'id_user' => 'required|string|max:191',
+            'fotoID' => 'required|string|max:191',
+            'userID' => 'required|string|max:191',
+            'tanggalLike' => 'required|date',
         ]);
 
         if($validator->fails()){
@@ -121,13 +118,12 @@ class AlbumController extends Controller
 
         }else{
 
-            $album = Album::find($id);
-            if($album){
-                $album->update([
-                    'NamaAlbum' => $request->NamaAlbum,
-                    'Deskripsi' => $request->Deskripsi,
-                    'TanggalDiBuat' => $request->TanggalDiBuat,
-                    'id_user' => $request->id_user,
+            $like = Like::find($id);
+            if($like){
+                $like->update([
+                    'fotoID' => $request->fotoID,
+                    'userID' => $request->userID,
+                    'tanggalLike' => $request->tanggalLike,
                 ]);
 
                 return response()->json([
@@ -147,10 +143,10 @@ class AlbumController extends Controller
 
     public function destroy($id)
     {
-        $album = Album::find($id);
+        $like = Like::find($id);
         if($album){
 
-            $album->delete();
+            $like->delete();
             return response()->json([
                 'status' => 200,
                 'message' => "Data telah dihapus"

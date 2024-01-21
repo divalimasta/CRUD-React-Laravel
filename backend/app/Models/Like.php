@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Like extends Model
 {
     use HasFactory;
 
-    protected $table = 'user';
-    protected $primaryKey = 'id_user' ;
+    protected $table = 'likefoto';
+    protected $primaryKey = 'likeID' ;
     protected $fillable =[
-        'username',
-        'password',
-        'email',
-        'NamaLengkap',
-        'alamat'
+        'fotoID',
+        'userID',
+        'tanggalLike'
     ];
 
     public $timestamps = false;

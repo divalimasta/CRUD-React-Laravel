@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Album;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class AlbumController extends Controller
+class UserController extends Controller
 {
     public function index() 
     {
-        $albums = Album::all();
-        if($albums->count() > 0){
+        $users = User::all();
+        if($users->count() > 0){
             return response()->json([
                 'status' => 200,
-                'albums' => $albums
+                'users' => $users
             ], 200);
         }else{
             return response()->json([
@@ -28,10 +28,11 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
-            'id_user' => 'required|string|max:191',
+            'username' => 'required|string|max:191',
+            'password' => 'required|string|max:191',
+            'email' => 'required|string|max:191',
+            'NamaLengkap' => 'required|string|max:191',
+            'alamat' => 'required|string|max:191'
         ]);
 
         if($validator->fails()){
@@ -43,14 +44,15 @@ class AlbumController extends Controller
 
         }else{
 
-            $album = Album::create([
-                'NamaAlbum' => $request->NamaAlbum,
-                'Deskripsi' => $request->Deskripsi,
-                'TanggalDiBuat' => $request->TanggalDiBuat,
-                'id_user' => $request->id_user,
+            $user = User::create([
+                'username' => $request->username,
+                'password' => $request->password,
+                'email' => $request->email,
+                'NamaLengkap' => $request->NamaLengkap,
+                'alamat' => $request->alamat,
             ]);
 
-            if($album){
+            if($user){
 
                 return response()->json([
                     'status' => 200,
@@ -69,11 +71,11 @@ class AlbumController extends Controller
 
     public function show($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $user = User::find($id);
+        if($user){
             return response()->json([
                 'status' => 200,
-                'message' => $album
+                'message' => $user
             ],200);
 
         }else{
@@ -87,11 +89,11 @@ class AlbumController extends Controller
 
     public function edit($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $user = User::find($id);
+        if($user){
             return response()->json([
                 'status' => 200,
-                'album' => $album
+                'user' => $user
             ],200);
 
         }else{
@@ -106,10 +108,11 @@ class AlbumController extends Controller
     public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
-            'NamaAlbum' => 'required|string|max:191',
-            'Deskripsi' => 'required|string|max:191',
-            'TanggalDiBuat' => 'required|date',
-            'id_user' => 'required|string|max:191',
+            'username' => 'required|string|max:191',
+            'password' => 'required|string|max:191',
+            'email' => 'required|string|max:191',
+            'NamaLengkap' => 'required|string|max:191',
+            'alamat' => 'required|string|max:191',
         ]);
 
         if($validator->fails()){
@@ -121,13 +124,14 @@ class AlbumController extends Controller
 
         }else{
 
-            $album = Album::find($id);
-            if($album){
-                $album->update([
-                    'NamaAlbum' => $request->NamaAlbum,
-                    'Deskripsi' => $request->Deskripsi,
-                    'TanggalDiBuat' => $request->TanggalDiBuat,
-                    'id_user' => $request->id_user,
+            $user = User::find($id);
+            if($user){
+                $user->update([
+                    'username' => $request->username,
+                    'password' => $request->password,
+                    'email' => $request->email,
+                    'NamaLengkap' => $request->NamaLengkap,
+                    'alamat' => $request->alamat,
                 ]);
 
                 return response()->json([
@@ -147,10 +151,10 @@ class AlbumController extends Controller
 
     public function destroy($id)
     {
-        $album = Album::find($id);
-        if($album){
+        $user = User::find($id);
+        if($user){
 
-            $album->delete();
+            $user->delete();
             return response()->json([
                 'status' => 200,
                 'message' => "Data telah dihapus"

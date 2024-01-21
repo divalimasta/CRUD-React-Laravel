@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('album', function (Blueprint $table) {
-            $table->id();
+            $table->string('AlbumID');
             $table->string('NamaAlbum');
             $table->string('Deskripsi');
-            $table->string('TanggalDiBuat');
+            $table->date('TanggalDiBuat');
             $table->string('id_user');
             $table->timestamps();
         });
