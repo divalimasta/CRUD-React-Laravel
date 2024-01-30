@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Home from '../pages/Home.js';
-import Album from '../pages/Album.js';
+import Albummmm from '../pages/Album.js';
 import AlbumCreate from '../pages/AlbumCreate.js';
 import AlbumEdit from '../pages/AlbumEdit.js';
 import User from '../pages/User.js';
@@ -13,13 +13,15 @@ import FotoCreate from '../pages/FotoCreate.js';
 import Like from '../pages/Like.js';
 import LikeCreate from '../pages/LikeCreate.js';
 import LikeEdit from '../pages/LikeEdit.js';
+import Login from '../pages/Login.js';
+import Register from '../pages/Register.js';
 
 function MyRouter() {
 
     return (
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/albums" element={<Album />} />
+            <Route path="/albums" element={<Albummmm />} />
             <Route path="/albums/create" element={<AlbumCreate />} />
             <Route path="albums/:id/edit" element={<AlbumEdit />} />
             <Route path="/users" element={<User />} />
@@ -31,6 +33,8 @@ function MyRouter() {
             <Route path="/likes" element={<Like />} />
             <Route path="/likes/create" element={<LikeCreate />} />
             <Route path="likes/:id/edit" element={<LikeEdit />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
         </Routes>
     )
 
